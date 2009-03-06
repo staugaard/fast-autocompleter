@@ -1,7 +1,10 @@
+var res = null;
+
 function lookup(searchString, callback) {
-  new Ajax.Request('/users/autocomplete', { parameters: {name: searchString, rand: (new Date()).getTime()},
+  new Ajax.Request('http://github.com/api/v1/json/search/' + searchString, {
                                             onSuccess: function(response) {
-                                              callback(response.responseJSON);
+                                              res = response.responseJSON;
+                                              //callback(response.responseJSON);
                                             } });
 }
 
