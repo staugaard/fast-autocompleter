@@ -1,9 +1,10 @@
-var FacebookList = Class.create({
+Autocompleter.MultiValue = Class.create({
   options: $H({}),
   element: null,
   dataFetcher: null,
   
-  initialize: function(element, dataFetcher) {
+  initialize: function(element, dataFetcher, options) {
+    this.options = options || { };
     var outputElement = $(element);
     this.name = outputElement.name;
     this.form = outputElement.up('form');
@@ -176,7 +177,7 @@ var FacebookList = Class.create({
       
       for (var i = 0; i < this.entryCount; i++) {
         var entry = this.getEntry(i);
-        entry.facebookListIndex = i;
+        entry.choiceIndex = i;
         this.addObservers(entry);
       }
       
