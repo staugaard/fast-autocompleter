@@ -3,7 +3,18 @@ Autocompleter.MultiValue = Class.create({
   element: null,
   dataFetcher: null,
   
-  initialize: function(element, dataFetcher, options) {
+  createSelectedElement: function(id, title) {
+    var closeLink = Builder.node('a', {className: 'close', href: '#'}, '×');
+    closeLink.observe('click', function(e) {
+      var choiceElement = e.element().up('li');
+      choiceElement.remove();
+      e.stop();
+    });
+    var hiddenValueField = Builder.node('input', {type: 'hidden', name: this.name, value: id, style: 'display: none;'});
+    return Builder.node('li', { className:'choice', choice_id: id }, [title, closeLink, hiddenValueField]);
+  },
+  
+  initialize: function(element, dataFetcher, values, options) {
     this.options = options || { };
     var outputElement = $(element);
     this.name = outputElement.name;
@@ -37,6 +48,10 @@ Autocompleter.MultiValue = Class.create({
     
     Event.observe(this.holder, 'click', Form.Element.focus.curry(this.searchField));
     Event.observe(this.searchField, 'keydown', this.onKeyPress.bindAsEventListener(this));
+    
+    (values || []).each(function(value) {
+      this.searchFieldItem.insert({before: this.createSelectedElement(value[1], value[0])});
+    }, this);
   },
   
   show: function() {
@@ -221,17 +236,6 @@ Autocompleter.MultiValue = Class.create({
     node.choiceId = id;
     node.autocompleteIndex = choiceIndex;
     return node;
-  },
-  
-  createSelectedElement: function(id, title) {
-    var closeLink = Builder.node('a', {className: 'close', href: '#'}, '×');
-    closeLink.observe('click', function(e) {
-      var choiceElement = e.element().up('li');
-      choiceElement.remove();
-      e.stop();
-    });
-    var hiddenValueField = Builder.node('input', {type: 'hidden', name: this.name, value: id, style: 'display: none;'});
-    return Builder.node('li', { className:'choice', choice_id: id }, [title, closeLink, hiddenValueField]);
   },
   
   render: function() {
