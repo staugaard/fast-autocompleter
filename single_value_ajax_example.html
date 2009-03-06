@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+  <title>example</title>
+  
+  <script type="text/javascript" charset="utf-8" src="lib/prototype.js"></script>
+  <script type="text/javascript" charset="utf-8" src="lib/scriptaculous.js"></script>
+  <script type="text/javascript" charset="utf-8" src="lib/effects.js"></script>
+  <script type="text/javascript" charset="utf-8" src="lib/builder.js"></script>
+  <script type="text/javascript" charset="utf-8" src="src/facebooklist.js"></script>
+  <script type="text/javascript" charset="utf-8" src="src/autocompleter_cache.js"></script>
+  
+  <script type="text/javascript" charset="utf-8">
+    function lookup(searchString, callback) {
+      new Ajax.Request('/users/autocomplete', { parameters: {name: searchString, rand: (new Date()).getTime()},
+                                                onSuccess: function(response) {
+                                                  callback(response.responseJSON);
+                                                } });
+    }
+    
+    var cachedBackend = new Autocompleter.Cache(lookup, {choices: 10});
+    var cachedLookup = cachedBackend.lookup.bind(cachedBackend);
+  </script>
+  
+  <style type="text/css" media="screen">
+    div.autocomplete {
+      position:absolute;
+      width:250px;
+      background-color:white;
+      border:1px solid #888;
+      margin:0;
+      padding:0;
+    }
+    div.autocomplete ul {
+      list-style-type:none;
+      margin:0;
+      padding:0;
+    }
+    div.autocomplete ul li.selected { background-color: #ffb;}
+    div.autocomplete ul li {
+      list-style-type:none;
+      display:block;
+      margin:0;
+      padding:2px;
+      height:32px;
+      cursor:pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <form action="example.html" method="get" accept-charset="utf-8">
+    <p>
+      <input type="text" id="autocomplete" name="autocomplete_parameter"/>
+      <div id="autocomplete_choices" class="autocomplete"></div>
+    </p>
+    <p>
+      <input type="text" id="caching_autocomplete" name="caching_autocomplete_parameter"/>
+      <div id="caching_autocomplete_choices" class="autocomplete"></div>
+    </p>
+    <p>
+      <input type="submit" value="Continue &rarr;">
+    </p>
+  </form>
+  
+  <script type="text/javascript" charset="utf-8">
+    new Autocompleter.Json("autocomplete", "autocomplete_choices", lookup, {});
+    new Autocompleter.Json("caching_autocomplete", "caching_autocomplete_choices", cachedLookup, {});
+  </script>
+</body>
+</html>
