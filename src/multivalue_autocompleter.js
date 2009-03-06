@@ -39,7 +39,7 @@ Autocompleter.MultiValue = Class.create({
     
     this.searchField = Builder.node('input');
     this.searchFieldItem = Builder.node('li', {className: 'search_field_item'}, [this.searchField]);
-    this.holder = Builder.node('ul', {className: 'multi_value_field'}, [this.searchFieldItem]);
+    this.holder = Builder.node('ul', {className: 'multi_value_field', style: 'width: ' + (outputElement.getWidth() - 12) + 'px'}, [this.searchFieldItem]);
     outputElement.insert({before: this.holder});
     outputElement.remove();
     this.choicesHolder = Builder.node('ul', {className: 'multi_value_field_choices', style: 'position: absolute;'});

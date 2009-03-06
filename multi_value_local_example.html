@@ -6,6 +6,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
   <title>example</title>
+  <link rel="stylesheet" href="multivalue_field.css" type="text/css" media="screen" charset="utf-8">
   
   <script type="text/javascript" charset="utf-8" src="lib/prototype.js"></script>
   <script type="text/javascript" charset="utf-8" src="lib/scriptaculous.js"></script>
@@ -24,92 +25,6 @@
     var cachedBackend = new Autocompleter.Cache(lookup, {choices: 10});
     var cachedLookup = cachedBackend.lookup.bind(cachedBackend);
   </script>
-  
-  <style type="text/css" media="screen">
-    ul.multi_value_field {
-      overflow: hidden;
-      list-style-type: none;
-      padding: 4px 5px;
-      margin: 0px;
-      width: 800px;
-      border: 1px solid #999;
-      height: auto !important;
-    }
-    
-    ul.multi_value_field li, ul.multi_value_field input {
-      display: block;
-      float: left;
-      margin: 0 5px 0 0;
-      list-style-type: none;
-      -x-system-font: none;
-      font-family: "Lucida Grande","Verdana";
-      font-size: 11px;
-    }
-    
-    ul.multi_value_field li.choice {
-      -border-radius: 6px;
-      -moz-border-radius: 6px;
-      -webkit-border-radius: 6px;
-      background: #DEE7F8 none repeat scroll 0 0;
-      border: 1px solid #CAD8F3;
-      padding: 1px 5px 2px;
-    }
-    
-    ul.multi_value_field li.choice a.close {
-      font-weight: bold;
-      color: #777;
-      padding: 2px 0 2px 3px;
-      font-size: 12px;
-      cursor: hand;
-      text-decoration: none;
-      outline: none;
-    }
-    
-    ul.multi_value_field li input {
-      border: 0;
-      margin: 0;
-      outline: 0;
-      padding: 3px 0 3px;
-      width: 150px;
-    }
-    
-    ul.multi_value_field li.choice:hover {
-      background-color: #BBCEF1;
-      border-color: #6D95E0;
-    }
-    
-    ul.multi_value_field_choices {
-      background: #EEE;
-      list-style-type: none;
-      padding: 0px;
-      margin: 0px;
-    }
-    
-    ul.multi_value_field_choices li.choice {
-      background: #EEE;
-      border: 1px solid #CCC;
-      border-top: none;
-      font-size: 80%;
-      padding: 4px 12px;
-      font-family: "Lucida Grande","Verdana";
-      font-size: 11px;
-    }
-    
-    ul.multi_value_field_choices li.selected {
-      background: #4173CC;
-      border: none;
-      padding: 4px 13px 5px;
-      color: #EEE;
-    }
-    
-    ul.multi_value_field_choices li.choice strong {
-      background: #BBB;
-    }
-
-    ul.multi_value_field_choices li.selected strong {
-      background: #3159A1;
-    }
-  </style>
 </head>
 
 <body>
@@ -117,11 +32,15 @@
   
   <form action="multi_value_local_example.html" method="get" accept-charset="utf-8">
     <p>
-      <input type="text" name="people[]" value="" id="people"/>
+      <input type="text" name="name" value="other field" id="name" style="width: 400px"/>
+    </p>
+
+    <p>
+      <input type="text" name="people[]" value="" id="people" style="width: 400px"/>
     </p>
     
     <p>
-      <input type="text" name="cached_people[]" value="" id="cached_people"/>
+      <input type="text" name="cached_people[]" value="" id="cached_people" style="width: 400px"/>
     </p>
     
     <p>
