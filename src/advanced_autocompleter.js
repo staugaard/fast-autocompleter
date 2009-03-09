@@ -24,7 +24,8 @@ Autocompleter.Cache = Class.create({
     this.cache = new Hash();
     this.backendLookup = backendLookup;
     this.options = Object.extend({
-      choices: 10
+      choices: 10,
+      fuzzySearch: false
     }, options || {});
   },
   
@@ -53,7 +54,7 @@ Autocompleter.Cache = Class.create({
   },
   
   _localSearch: function(data, term) {
-    var exp = new RegExp(term.gsub(/./, ".*#{0}"), 'i');
+    var exp = this.options.fuzzySearch ? new RegExp(term.gsub(/./, ".*#{0}"), 'i') : new RegExp(term, 'i');
     var foundItems = new Array();
     
     //optimized for speed:

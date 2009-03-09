@@ -116,7 +116,7 @@
              "Jacquelyn Cremin"];
     
     function lookup(searchString, callback) {
-      var exp = new RegExp(searchString.gsub(/./, ".*#{0}"), 'i');
+      var exp = new RegExp(searchString, 'i');
       callback(names.select(function(name) {return exp.test(name);}));
     }
 
