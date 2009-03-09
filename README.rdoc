@@ -1,0 +1,45 @@
+= Fast Autocompleter
+A wicket fast Scriptaculous Autocompleter and an extended multi value text field autocompleter.
+
+== Description:
+
+the good and the bad
+
+== Speeding it up with client side caching
+
+You want to reduce the number of hits on your server, so sending an AJAX request every time a user hit a key is a really bad idea. Especially is the browser already has the information that it needs.
+
+  function lookup(searchString, callback) {
+    new Ajax.Request('/users/autocomplete', { parameters: {name: searchString, rand: (new Date()).getTime()},
+                                              onSuccess: function(response) {
+                                                callback(response.responseJSON);
+                                              } });
+  }
+  
+  var cachedBackend = new Autocompleter.Cache(lookup, {choices: 10});
+  var cachedLookup = cachedBackend.lookup.bind(cachedBackend);
+
+== Features:
+
+* all features...
+
+== Known issues:
+
+* any?
+
+== Requirements:
+
+* Prototype (http://prototypejs.org)
+* Scriptaculous (http://script.aculo.us)
+
+== ORIGINAL CODE IDEAS:
+
+* http://www.37signals.com/svn/posts/1356-new-in-highrise-much-faster-sidebar-searching
+
+== SPONSORED BY:
+
+http://zendesk.com - Enlightened Customer Support
+
+== LICENSE:
+
+?????
