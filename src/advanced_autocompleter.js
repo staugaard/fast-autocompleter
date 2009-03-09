@@ -83,14 +83,14 @@ Autocompleter.MultiValue = Class.create({
   dataFetcher: null,
   
   createSelectedElement: function(id, title) {
-    var closeLink = Builder.node('a', {className: 'close', href: '#'}, '×');
+    var closeLink = new Element('a', {className: 'close', href: '#'}).update('×');
     closeLink.observe('click', function(e) {
       var choiceElement = e.element().up('li');
       choiceElement.remove();
       e.stop();
     });
-    var hiddenValueField = Builder.node('input', {type: 'hidden', name: this.name, value: id, style: 'display: none;'});
-    return Builder.node('li', { className:'choice', choice_id: id }, [title, closeLink, hiddenValueField]);
+    var hiddenValueField = new Element('input', {type: 'hidden', name: this.name, value: id, style: 'display: none;'});
+    return new Element('li', { className:'choice', choice_id: id }).insert(title).insert(closeLink).insert(hiddenValueField);
   },
   
   initialize: function(element, dataFetcher, values, options) {
@@ -116,14 +116,14 @@ Autocompleter.MultiValue = Class.create({
     this.options.onHide = this.options.onHide ||
       function(element, update){ new Effect.Fade(update,{duration: 0.15}) };
     
-    this.searchField = Builder.node('input', {type: 'text'});
-    this.searchFieldItem = Builder.node('li', {className: 'search_field_item'}, [this.searchField]);
-    this.holder = Builder.node('ul', {className: 'multi_value_field', style: 'width: ' + (outputElement.getWidth() - 8) + 'px'}, [this.searchFieldItem]);
+    this.searchField = new Element('input', {type: 'text'});
+    this.searchFieldItem = new Element('li', {className: 'search_field_item'}).update(this.searchField);
+    this.holder = new Element('ul', {className: 'multi_value_field', style: 'width: ' + (outputElement.getWidth() - 8) + 'px'}).update(this.searchFieldItem);
     outputElement.insert({before: this.holder});
     outputElement.remove();
     
-    this.choicesHolderList = Builder.node('ul');
-    this.choicesHolder = Builder.node('div', {className: 'autocomplete', style: 'position: absolute;'}, [this.choicesHolderList]);
+    this.choicesHolderList = new Element('ul');
+    this.choicesHolder = new Element('div', {className: 'autocomplete', style: 'position: absolute;'}).update(this.choicesHolderList);
     this.holder.insert({after: this.choicesHolder});
     this.choicesHolder.hide();
     
@@ -310,7 +310,7 @@ Autocompleter.MultiValue = Class.create({
   },
 
   createChoiceElement: function(id, title, choiceIndex, searchTerm) {
-    var node = Builder.node('li', { choice_id: id });
+    var node = new Element('li', { choice_id: id });
     node.innerHTML = title.escapeHTML().gsub(new RegExp(searchTerm, 'i'), '<strong>#{0}</strong>');
     node.choiceId = id;
     node.autocompleteIndex = choiceIndex;
