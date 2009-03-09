@@ -32,17 +32,19 @@ Autocompleter.MultiValue = Class.create({
           } catch(e) {
           }
         }
-        Effect.Appear(update,{duration: 0.15, to: 0.9});
+        Effect.Appear(update,{duration: 0.15});
       };
     this.options.onHide = this.options.onHide ||
-      function(element, update){ new Effect.Fade(update,{duration: 0.15, from: 0.9}) };
+      function(element, update){ new Effect.Fade(update,{duration: 0.15}) };
     
-    this.searchField = Builder.node('input');
+    this.searchField = Builder.node('input', {type: 'text'});
     this.searchFieldItem = Builder.node('li', {className: 'search_field_item'}, [this.searchField]);
-    this.holder = Builder.node('ul', {className: 'multi_value_field', style: 'width: ' + (outputElement.getWidth() - 12) + 'px'}, [this.searchFieldItem]);
+    this.holder = Builder.node('ul', {className: 'multi_value_field', style: 'width: ' + (outputElement.getWidth() - 8) + 'px'}, [this.searchFieldItem]);
     outputElement.insert({before: this.holder});
     outputElement.remove();
-    this.choicesHolder = Builder.node('ul', {className: 'multi_value_field_choices', style: 'position: absolute;'});
+    
+    this.choicesHolderList = Builder.node('ul');
+    this.choicesHolder = Builder.node('div', {className: 'autocomplete', style: 'position: absolute;'}, [this.choicesHolderList]);
     this.holder.insert({after: this.choicesHolder});
     this.choicesHolder.hide();
     
@@ -91,11 +93,11 @@ Autocompleter.MultiValue = Class.create({
        case Event.KEY_TAB:
        case Event.KEY_RETURN:
          this.selectEntry();
-         Event.stop(event);
+         event.stop();
        case Event.KEY_ESC:
          this.hide();
          this.active = false;
-         Event.stop(event);
+         event.stop();
          return;
        case Event.KEY_LEFT:
        case Event.KEY_RIGHT:
@@ -103,12 +105,12 @@ Autocompleter.MultiValue = Class.create({
        case Event.KEY_UP:
          this.markPrevious();
          this.render();
-         Event.stop(event);
+         event.stop();
          return;
        case Event.KEY_DOWN:
          this.markNext();
          this.render();
-         Event.stop(event);
+         event.stop();
          return;
       }
      else
@@ -141,17 +143,15 @@ Autocompleter.MultiValue = Class.create({
   markPrevious: function() {
     if(this.index > 0) this.index--;
       else this.index = this.entryCount-1;
-    this.getEntry(this.index).scrollIntoView(true);
   },
 
   markNext: function() {
     if(this.index < this.entryCount-1) this.index++;
       else this.index = 0;
-    this.getEntry(this.index).scrollIntoView(false);
   },
 
   getEntry: function(index) {
-    return this.choicesHolder.childNodes[index];
+    return this.choicesHolderList.childNodes[index];
   },
 
   getCurrentEntry: function() {
@@ -185,9 +185,9 @@ Autocompleter.MultiValue = Class.create({
     if(!this.changed && this.hasFocus) {
       this.entryCount = choices.length;
       
-      this.choicesHolder.innerHTML = '';
+      this.choicesHolderList.innerHTML = '';
       choices.each(function(choice, choiceIndex) {
-        this.choicesHolder.insert(this.createChoiceElement(choice.last(), choice.first(), choiceIndex, term));
+        this.choicesHolderList.insert(this.createChoiceElement(choice.last(), choice.first(), choiceIndex, term));
       }.bind(this));
       
       for (var i = 0; i < this.entryCount; i++) {
@@ -231,7 +231,7 @@ Autocompleter.MultiValue = Class.create({
   },
 
   createChoiceElement: function(id, title, choiceIndex, searchTerm) {
-    var node = Builder.node('li', { className:'choice', choice_id: id });
+    var node = Builder.node('li', { choice_id: id });
     node.innerHTML = title.escapeHTML().gsub(new RegExp(searchTerm, 'i'), '<strong>#{0}</strong>');
     node.choiceId = id;
     node.autocompleteIndex = choiceIndex;

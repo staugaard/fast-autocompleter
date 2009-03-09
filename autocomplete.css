@@ -1,7 +1,47 @@
+/* Used suggestions on all examples */
+
+div.autocomplete ul {
+  background: #EEE;
+  list-style-type: none;
+  padding: 0px;
+  margin: 0px;
+}
+
+div.autocomplete ul li {
+  background: #EEE;
+  border: 1px solid #CCC;
+  border-top: none;
+  font-size: 80%;
+  padding: 4px 12px;
+  font-family: "Lucida Grande","Verdana";
+  font-size: 11px;
+  margin: 0px !important;
+  white-space: nowrap !important;
+}
+
+div.autocomplete ul li.selected {
+  background: #78959D;
+  border: none;
+  padding: 4px 13px 5px;
+  color: #FFF;
+}
+
+div.autocomplete ul li strong {
+  background: #BBB;
+}
+
+div.autocomplete ul li.selected strong {
+  background: #3159A1;
+}
+
+
+
+/* Only used on multi select fields */
+
 ul.multi_value_field {
   overflow: hidden;
   list-style-type: none;
-  padding: 4px 5px;
+  padding: 1px 3px;
   margin: 0px;
   border: 1px solid #999;
   height: auto !important;
@@ -10,7 +50,7 @@ ul.multi_value_field {
 ul.multi_value_field li, ul.multi_value_field input {
   display: block;
   float: left;
-  margin: 0 5px 0 0;
+  margin: 2px 5px 2px 0;
   list-style-type: none;
   -x-system-font: none;
   font-family: "Lucida Grande","Verdana";
@@ -23,7 +63,7 @@ ul.multi_value_field li.choice {
   -webkit-border-radius: 6px;
   background: #DEE7F8 none repeat scroll 0 0;
   border: 1px solid #CAD8F3;
-  padding: 1px 5px 2px;
+  padding: 1px 4px 2px;
 }
 
 ul.multi_value_field li.choice a.close {
@@ -42,6 +82,7 @@ ul.multi_value_field li input {
   outline: 0 !important;
   padding: 3px 0 3px !important;
   width: 100px !important;
+  background: none !important;
 }
 
 ul.multi_value_field li.choice:hover {
@@ -49,35 +90,3 @@ ul.multi_value_field li.choice:hover {
   border-color: #6D95E0;
 }
 
-ul.multi_value_field_choices {
-  background: #EEE;
-  list-style-type: none;
-  padding: 0px;
-  margin: 0px;
-}
-
-ul.multi_value_field_choices li.choice {
-  background: #EEE;
-  border: 1px solid #CCC;
-  border-top: none;
-  font-size: 80%;
-  padding: 4px 12px;
-  font-family: "Lucida Grande","Verdana";
-  font-size: 11px;
-  margin: 0px !important;
-}
-
-ul.multi_value_field_choices li.selected {
-  background: #4173CC;
-  border: none;
-  padding: 4px 13px 5px;
-  color: #EEE;
-}
-
-ul.multi_value_field_choices li.choice strong {
-  background: #BBB;
-}
-
-ul.multi_value_field_choices li.selected strong {
-  background: #3159A1;
-}

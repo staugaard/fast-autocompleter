@@ -1,7 +1,9 @@
 Autocompleter.Json = Class.create(Autocompleter.Base, {
   initialize: function(element, update, lookupFunction, options) {
+    options = options || {};
     this.baseInitialize(element, update, options);
     this.lookupFunction = lookupFunction;
+    this.options.choices = options.choices || 10;
   },
   
   getUpdatedChoices: function() {
@@ -9,11 +11,11 @@ Autocompleter.Json = Class.create(Autocompleter.Base, {
   },
   
   updateJsonChoices: function(choices) {
-    this.updateChoices('<ul>' + choices.map(this.jsonChoiceToListChoice).join('') + '</ul>');
+    this.updateChoices('<ul>' + choices.slice(0, this.options.choices).map(this.jsonChoiceToListChoice.bind(this)).join('') + '</ul>');
   },
   
-  jsonChoiceToListChoice: function(choice) {
-    return '<li>' + choice.escapeHTML() + '</li>';
+  jsonChoiceToListChoice: function(choice, mark) {
+    return '<li>' + choice.escapeHTML().gsub(new RegExp(this.getToken(), 'i'), '<strong>#{0}</strong>') + '</li>';
   }
 });
 

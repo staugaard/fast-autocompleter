@@ -4,6 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link rel="stylesheet" href="autocomplete.css" type="text/css" media="screen" charset="utf-8">
 
   <title>example</title>
   
@@ -123,41 +124,16 @@
     var cachedBackend = new Autocompleter.Cache(lookup, {choices: 10});
     var cachedLookup = cachedBackend.lookup.bind(cachedBackend);
   </script>
-  
-  <style type="text/css" media="screen">
-    div.autocomplete {
-      position:absolute;
-      width:250px;
-      background-color:white;
-      border:1px solid #888;
-      margin:0;
-      padding:0;
-    }
-    div.autocomplete ul {
-      list-style-type:none;
-      margin:0;
-      padding:0;
-    }
-    div.autocomplete ul li.selected { background-color: #ffb;}
-    div.autocomplete ul li {
-      list-style-type:none;
-      display:block;
-      margin:0;
-      padding:2px;
-      height:32px;
-      cursor:pointer;
-    }
-  </style>
 </head>
 
 <body>
   <form action="single_value_local_example.html" method="get" accept-charset="utf-8">
     <p>
-      <input type="text" id="autocomplete" name="autocomplete_parameter"/>
+      <input type="text" id="autocomplete" name="autocomplete_parameter" autocomplete="off"/>
       <div id="autocomplete_choices" class="autocomplete"></div>
     </p>
     <p>
-      <input type="text" id="caching_autocomplete" name="caching_autocomplete_parameter"/>
+      <input type="text" id="caching_autocomplete" name="caching_autocomplete_parameter" autocomplete="off"/>
       <div id="caching_autocomplete_choices" class="autocomplete"></div>
     </p>
     <p>
@@ -165,9 +141,33 @@
     </p>
   </form>
   
+  <p>
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  </p>
+  
+  <p>
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  </p>
+  
+  <p>
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  </p>
+  
+  <p>
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  </p>
+  
+  <p>
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  </p>
+  
+  <p>
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  </p>
+  
   <script type="text/javascript" charset="utf-8">
-    new Autocompleter.Json("autocomplete", "autocomplete_choices", lookup, {frequency: 0.1});
-    new Autocompleter.Json("caching_autocomplete", "caching_autocomplete_choices", cachedLookup, {frequency: 0.1});
+    var myAutocompleter = new Autocompleter.Json("autocomplete", "autocomplete_choices", lookup, {frequency: 0.1, choices: 10});
+    var myCachedAutocompleter = new Autocompleter.Json("caching_autocomplete", "caching_autocomplete_choices", cachedLookup, {frequency: 0.1});
   </script>
 </body>
 </html>

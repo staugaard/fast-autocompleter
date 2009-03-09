@@ -6,6 +6,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
   <title>example</title>
+  <link rel="stylesheet" href="autocomplete.css" type="text/css" media="screen" charset="utf-8">
   
   <script type="text/javascript" charset="utf-8" src="lib/prototype.js"></script>
   <script type="text/javascript" charset="utf-8" src="lib/scriptaculous.js"></script>
@@ -24,31 +25,6 @@
     var cachedBackend = new Autocompleter.Cache(lookup, {choices: 10});
     var cachedLookup = cachedBackend.lookup.bind(cachedBackend);
   </script>
-  
-  <style type="text/css" media="screen">
-    div.autocomplete {
-      position:absolute;
-      width:250px;
-      background-color:white;
-      border:1px solid #888;
-      margin:0;
-      padding:0;
-    }
-    div.autocomplete ul {
-      list-style-type:none;
-      margin:0;
-      padding:0;
-    }
-    div.autocomplete ul li.selected { background-color: #ffb;}
-    div.autocomplete ul li {
-      list-style-type:none;
-      display:block;
-      margin:0;
-      padding:2px;
-      height:32px;
-      cursor:pointer;
-    }
-  </style>
 </head>
 
 <body>
