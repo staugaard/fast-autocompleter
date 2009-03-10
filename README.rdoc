@@ -1,9 +1,9 @@
 = Fast Autocompleter
-A wicket fast Scriptaculous Autocompleter and an extended multi value text field autocompleter.
+A wicked fast Scriptaculous Autocompleter and an extended multi value text field autocompleter.
 
-Developed and used on zendesk.com for selecting users.
+Developed and used on http://zendesk.com for selecting users.
 
-== Sponsored by http://zendesk.com - Enlightened Customer Support
+== Sponsored by Zendesk - Enlightened Customer Support
 
 == Description
 
@@ -23,7 +23,7 @@ Major props to 37signals for sharing!
 
 == Setting up Autocompleter.Json
 
-Autocompleter.Json works a lot like the autocompleter that come with Scriptaculous, s you set up your markup and CSS in the same way:
+Autocompleter.Json works a lot like the autocompleters that come with Scriptaculous, so you set up your markup and CSS in the same way:
 
   <form>
     <p>
@@ -33,7 +33,7 @@ Autocompleter.Json works a lot like the autocompleter that come with Scriptaculo
     </p>
   </form>
 
-Where Autocompleter.Json is that you have to implement your own function for looking up suggestions and pass that as an argument to the Autocompleter.Json constructor:
+Where Autocompleter.Json is different, is that you have to implement your own function for looking up suggestions and pass that as an argument to the Autocompleter.Json constructor:
 
   <script type="text/javascript" charset="utf-8">
     function lookup(searchString, suggest) {
@@ -46,7 +46,9 @@ Where Autocompleter.Json is that you have to implement your own function for loo
     new Autocompleter.Json("autocomplete", "autocomplete_choices", lookup, {});
   </script>
 
-The above example is a very simple AJAX implementation that expects the server to respond with JSON data in the right format. Autocompleter.Json will call the lookup function whenever it needs a some suggestions to a value. Autocompleter.Json will pass two arguments to the lookup function, the first being the text that has been typed into the text area and the second being a function that should be called whenever the suggestions are ready. So you don't have to return anything in the lookup function, but you must call the suggest function if you have any suggestions the value being entered.
+The lookop function is expected to call the suggest function with an plain old Array of Strings.
+
+The above example is a very simple AJAX implementation that expects the server to respond with JSON data in the right format. Autocompleter.Json will call the lookup function whenever it needs some suggestions for a value. Autocompleter.Json will pass two arguments to the lookup function, the first being the text that has been typed into the text area and the second being a function that should be called whenever the suggestions are ready. So you don't have to return anything in the lookup function, but you must call the suggest function if you have any suggestions for the value being entered.
 
 === Options
 
@@ -54,7 +56,7 @@ The last constructor argument of Autocompleter.Json is an options hash you can u
 
 [choices]  the maximum number of suggestions to show on the screen. Defaults to 10.
 
-So where is the benefit? Well the only benefit is that it is easy to implement you own custom lookup feature, and that we easily can proxy the lookup function with Autocompleter.Cache.
+So where is the benefit? Well the only benefit is that it is easy to implement you own custom lookup function, and that we easily can proxy the lookup function with Autocompleter.Cache.
 
 == Speeding it up with client side caching
 
@@ -74,11 +76,11 @@ You want to reduce the number of hits on your server, so sending an AJAX request
     new Autocompleter.Json("autocomplete", "autocomplete_choices", cachedLookup, {});
   </script>
 
-In the above example, cachedLookup is a function that behaves just like the lookup function except that is caches the responses.
+In the above example, cachedLookup is a function that behaves just like the lookup function except that it caches the responses.
 
-Making a first call to cachedLookup with "m" as the searchString, will call the lookup function call the suggest callback function and cache the results. A second call the cachedLookup function with "m" as the searchString will NOT call the lookup function, but serve the results from the previous call to the suggest callback function. But there is more.... Making a call to cachedLookup with "mi" as the searchString will NOT call the lookup function, but will use the result for the "m" searchString as a basis for client side search. These results are also cached so searching for "mic" will use the "mi" results as a basis. This speeds up the lookup function quite significantly, and greatly reduced the number of round trips to your server.
+Making a first call to cachedLookup with "m" as the searchString, will call the lookup function call the suggest callback function and cache the results. A second call the cachedLookup function with "m" as the searchString will NOT call the lookup function, but serve the results from the previous call to the suggest callback function. But there is more.... Making a call to cachedLookup with "mi" as the searchString will NOT call the lookup function, but will use the result for the "m" searchString as a basis for client side search. These results are also cached so searching for "mic" will use the "mi" results as a basis. This speeds up the lookup function quite significantly, and greatly reduces the number of round trips to your server.
 
-*For Autocompleter.Cache to work it is important that your lookup function finds ALL the suggestions for the search string. It is OK to give around a thousand suggestions. So find it all, not just the first 10*
+<strong>For Autocompleter.Cache to work it is important that your lookup function finds ALL the suggestions for the search string. It is OK to give around a thousand suggestions. So find it all, not just the first 10.</strong>
 
 === Options
 
