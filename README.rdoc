@@ -80,7 +80,7 @@ In the above example, cachedLookup is a function that behaves just like the look
 
 Making a first call to cachedLookup with "m" as the searchString, will call the lookup function call the suggest callback function and cache the results. A second call the cachedLookup function with "m" as the searchString will NOT call the lookup function, but serve the results from the previous call to the suggest callback function. But there is more.... Making a call to cachedLookup with "mi" as the searchString will NOT call the lookup function, but will use the result for the "m" searchString as a basis for client side search. These results are also cached so searching for "mic" will use the "mi" results as a basis. This speeds up the lookup function quite significantly, and greatly reduces the number of round trips to your server.
 
-<strong>For Autocompleter.Cache to work it is important that your lookup function finds ALL the suggestions for the search string. It is OK to give around a thousand suggestions. So find it all, not just the first 10.</strong>
+<b>For Autocompleter.Cache to work it is important that your lookup function finds ALL the suggestions for the search string. It is OK to give around a thousand suggestions. So find it all, not just the first 10.</b>
 
 === Options
 
