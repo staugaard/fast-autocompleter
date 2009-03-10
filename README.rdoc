@@ -1,7 +1,9 @@
 = Fast Autocompleter
 A wicket fast Scriptaculous Autocompleter and an extended multi value text field autocompleter.
 
-Developed and used on zendesk.com for selecting users
+Developed and used on zendesk.com for selecting users.
+
+== Sponsored by http://zendesk.com - Enlightened Customer Support
 
 == Description
 
@@ -11,10 +13,6 @@ in your web application.
 Autocompleting text fields normally send an AJAX request every time you change the value of the text field to get the suggested values from the server. Sending all these AJAX requests is slow, and if there is one thing you expect from an autocomplete feature it is that it must be fast. Sam Stephenson from 37signals showed us how to speed things up like he did on the search-for-a-person feature of Highrise. Fast Autocompleter is an implementation of what 37signals has shared.
 
 Major props to 37signals for sharing!
-
-== Sponsored by
-
-http://zendesk.com - Enlightened Customer Support
 
 === Features
 
