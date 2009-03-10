@@ -117,30 +117,50 @@
     
     function lookup(searchString, callback) {
       var exp = new RegExp(searchString, 'i');
+      $('log').insert('lookup ' + searchString + '<br/>');
       callback(names.select(function(name) {return exp.test(name);}));
     }
 
     var cachedBackend = new Autocompleter.Cache(lookup, {choices: 10});
     var cachedLookup = cachedBackend.lookup.bind(cachedBackend);
   </script>
+  
+  <style type="text/css" media="screen">
+    #form, #log {
+      float: left;
+      margin: 25px;
+    }
+    
+    input {
+      width: 300px;
+    }
+  </style>
 </head>
 
 <body>
-  <form action="single_value_local_example.html" method="get" accept-charset="utf-8">
-    <p>
-      <input type="text" id="autocomplete" name="autocomplete_parameter" autocomplete="off"/>
-      <div id="autocomplete_choices" class="autocomplete"></div>
-    </p>
-    <p>
-      <input type="text" id="caching_autocomplete" name="caching_autocomplete_parameter" autocomplete="off"/>
-      <div id="caching_autocomplete_choices" class="autocomplete"></div>
-    </p>
-    <p>
-      <input type="submit" value="Continue &rarr;">
-    </p>
-  </form>
+  <div id="form">
+    <form action="single_value_local_example.html" method="get" accept-charset="utf-8">
+      <p>
+        This field has no cache:<br/>
+        <input type="text" id="autocomplete" name="autocomplete_parameter" autocomplete="off"/>
+        <div id="autocomplete_choices" class="autocomplete"></div>
+      </p>
+      <p>
+        This field uses the cache:<br/>
+        <input type="text" id="caching_autocomplete" name="caching_autocomplete_parameter" autocomplete="off"/>
+        <div id="caching_autocomplete_choices" class="autocomplete"></div>
+      </p>
+      <p>
+        <input type="submit" value="Continue &rarr;">
+      </p>
+    </form>
+  </div>
   
-  <p>
+  <div id="log">
+    <strong>Log:</strong><br/>
+  </div>
+  
+  <p style="clear: left;">
     Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
   </p>
   
