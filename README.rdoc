@@ -137,7 +137,7 @@ Speeding up the lookup function with Autocompleter.Cache is just as easy as with
     new Autocompleter.MultiValue("autocomplete", cachedLookup);
   </script>
 
-For supporting all your edit views, the Autocompleter.MultiValue constructor takes a third argument i.e. an array of initial values. So again if I wanted Mick and Alexander to be the initial values, I would construct the my form field like this:
+For supporting all your edit views, the Autocompleter.MultiValue constructor takes a third argument i.e. an array of initial values. So again if I wanted Mick and Alexander to be the initial values, I would construct my form field like this:
 
   new Autocompleter.MultiValue("autocomplete", cachedLookup, [["Mick Staugaard", 1], ["Alexander Aghassipour", 3]]);
 
@@ -157,6 +157,8 @@ Let us know if you find any.
 == Original code ideas:
 
 * http://www.37signals.com/svn/posts/1356-new-in-highrise-much-faster-sidebar-searching
+* http://devthought.com/blog/projects-news/2008/01/textboxlist-meets-autocompletion/
+* http://www.interiders.com/2008/02/11/prototextboxlist-meets-autocompletion/
 
 == LICENSE:
 
