@@ -89,6 +89,62 @@ The last constructor argument of Autocompleter.Cache is an options hash you can 
 [choices]      The maximum number of suggestions that should be passed to the suggest callback function. Defaults to 10.
 [fuzzySearch]  Specifies if the local client side search should be "fuzzy". Refer to the description above for a "definition".
 
+== Autocompleter.MultiValue - the autocompleting multi value form element
+
+The original inspiration for this form element comes from Apple Mail and the Facebook message composer. They both have these cool autocompleting fields for entering message recipients. Others have implemented this in JavaScript (including Facebook obviously), but this implementation works perfectly with the speedy Autocompleter.Cache.
+
+The markup needed for this form element to work is just a simple text field:
+
+  <form>
+    <p>
+      <input type="text" id="autocomplete" name="users[]"/>
+      <input type="submit" value="OK">
+    </p>
+  </form>
+
+For the output of Autocompleter.MultiValue to make any sense you need to supply e bunch of CSS. Have a look at the autocomplete.css for a good starting point.
+
+Just like Autocompleter.Json you need to implement your own lookup function and pass it to the constructor:
+
+  <script type="text/javascript" charset="utf-8">
+    function lookup(searchString, suggest) {
+      new Ajax.Request('/users/autocomplete', { parameters: {name: searchString, rand: (new Date()).getTime()},
+                                                onSuccess: function(response) {
+                                                  suggest(response.responseJSON);
+                                                } });
+    }
+  
+    new Autocompleter.MultiValue("autocomplete", lookup);
+  </script>
+
+That's the simplest working example of a multi value text field with AJAX auto completion. With Autocompleter.MultiValue the suggest function takes an array of name, id pairs as its single argument. So you must call suggest with an argument like <code>[["Mick Staugaard", 1], ["Morten Primdahl", 2], ["Alexander Aghassipour", 3]]</code> when you have suggestions to the value.
+
+The form output of Autocompleter.MultiValue is a series of hidden input fields containing the ids of the selected values, so if you in the above example would choose Mick and Alexander (user id 1 and 3) the form output would be users[]=1&users[]=3
+
+Speeding up the lookup function with Autocompleter.Cache is just as easy as with Autocompleter.Json:
+
+  <script type="text/javascript" charset="utf-8">
+    function lookup(searchString, suggest) {
+      new Ajax.Request('/users/autocomplete', { parameters: {name: searchString, rand: (new Date()).getTime()},
+                                                onSuccess: function(response) {
+                                                  suggest(response.responseJSON);
+                                                } });
+    }
+  
+    var cachedBackend = new Autocompleter.Cache(lookup, {choices: 10});
+    var cachedLookup = cachedBackend.lookup.bind(cachedBackend);
+
+    new Autocompleter.MultiValue("autocomplete", cachedLookup);
+  </script>
+
+For supporting all your edit views, the Autocompleter.MultiValue constructor takes a third argument i.e. an array of initial values. So again if I wanted Mick and Alexander to be the initial values, I would construct the my form field like this:
+
+  new Autocompleter.MultiValue("autocomplete", cachedLookup, [["Mick Staugaard", 1], ["Alexander Aghassipour", 3]]);
+
+Just like any other Scriptaculous Autocompleter, the Autocompleter.MultiValue takes a last argument with options and at the moment no extra options are supported than what Autocompleter.Base supports.
+
+Check out multi_value_local_example.html for an example of how this form element can look.
+
 == Known issues
 
 Let us know if you find any.
