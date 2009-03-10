@@ -12,6 +12,10 @@ Autocompleting text fields normally send an AJAX request every time you change t
 
 Major props to 37signals for sharing!
 
+== Sponsored by
+
+http://zendesk.com - Enlightened Customer Support
+
 === Features
 
 * Autocompleter.Json. A modified version of the Scriptaculous Autocompleter, that takes it's data from a function. This is more flexible than the Ajax.Autocompleter and Autocompleter.Local that comes with Scriptaculous.
@@ -98,11 +102,9 @@ Let us know if you find any.
 
 * http://www.37signals.com/svn/posts/1356-new-in-highrise-much-faster-sidebar-searching
 
-== Sponsored by
-
-http://zendesk.com - Enlightened Customer Support
-
 == LICENSE:
+
+(The MIT License)
 
 Copyright (c) 2009 Zendesk
 
