@@ -1,45 +1,128 @@
 = Fast Autocompleter
 A wicket fast Scriptaculous Autocompleter and an extended multi value text field autocompleter.
 
-== Description:
+Developed and used on zendesk.com for selecting users
 
-the good and the bad
+== Description
+
+Fast Autocompleter is a small JavaScript library that can help you get more responsive autocompleting text fields
+in your web application.
+
+Autocompleting text fields normally send an AJAX request every time you change the value of the text field to get the suggested values from the server. Sending all these AJAX requests is slow, and if there is one thing you expect from an autocomplete feature it is that it must be fast. Sam Stephenson from 37signals showed us how to speed things up like he did on the search-for-a-person feature of Highrise. Fast Autocompleter is an implementation of what 37signals has shared.
+
+Major props to 37signals for sharing!
+
+=== Features
+
+* Autocompleter.Json. A modified version of the Scriptaculous Autocompleter, that takes it's data from a function. This is more flexible than the Ajax.Autocompleter and Autocompleter.Local that comes with Scriptaculous.
+* Autocompleter.Cache. A caching layer for Autocompleter.Json, with local cache searching. This is where the speed comes from.
+* Optional "fuzzy" search like the Command-T file search feature of TextMate. This enables you to search for Mick Staugaard by typing "mist" or "ms".
+* Autocompleter.MultiValue. An Apple Mail and Facebook inspired form element for entering more than one value into a text field.
+
+== Setting up Autocompleter.Json
+
+Autocompleter.Json works a lot like the autocompleter that come with Scriptaculous, s you set up your markup and CSS in the same way:
+
+  <form>
+    <p>
+      <input type="text" id="autocomplete" name="name"/>
+      <div id="autocomplete_choices" class="autocomplete"></div>
+      <input type="submit" value="OK">
+    </p>
+  </form>
+
+Where Autocompleter.Json is that you have to implement your own function for looking up suggestions and pass that as an argument to the Autocompleter.Json constructor:
+
+  <script type="text/javascript" charset="utf-8">
+    function lookup(searchString, suggest) {
+      new Ajax.Request('/users/autocomplete', { parameters: {name: searchString, rand: (new Date()).getTime()},
+                                                onSuccess: function(response) {
+                                                  suggest(response.responseJSON);
+                                                } });
+    }
+  
+    new Autocompleter.Json("autocomplete", "autocomplete_choices", lookup, {});
+  </script>
+
+The above example is a very simple AJAX implementation that expects the server to respond with JSON data in the right format. Autocompleter.Json will call the lookup function whenever it needs a some suggestions to a value. Autocompleter.Json will pass two arguments to the lookup function, the first being the text that has been typed into the text area and the second being a function that should be called whenever the suggestions are ready. So you don't have to return anything in the lookup function, but you must call the suggest function if you have any suggestions the value being entered.
+
+=== Options
+
+The last constructor argument of Autocompleter.Json is an options hash you can use to customize its behavior. Ontop of the options defined in Autocompleter.Base (from Scriptaculous), Autocompleter.Json takes another option:
+
+[choices]  the maximum number of suggestions to show on the screen. Defaults to 10.
+
+So where is the benefit? Well the only benefit is that it is easy to implement you own custom lookup feature, and that we easily can proxy the lookup function with Autocompleter.Cache.
 
 == Speeding it up with client side caching
 
-You want to reduce the number of hits on your server, so sending an AJAX request every time a user hit a key is a really bad idea. Especially is the browser already has the information that it needs.
+You want to reduce the number of hits on your server, so sending an AJAX request every time a user hits a key is a really bad idea. Especially if the browser already has the information it needs. Autocompleter.Cache is a simple client side caching layer you can slap onto your own autocomplete lookup function:
 
-  function lookup(searchString, callback) {
-    new Ajax.Request('/users/autocomplete', { parameters: {name: searchString, rand: (new Date()).getTime()},
-                                              onSuccess: function(response) {
-                                                callback(response.responseJSON);
-                                              } });
-  }
-  
-  var cachedBackend = new Autocompleter.Cache(lookup, {choices: 10});
-  var cachedLookup = cachedBackend.lookup.bind(cachedBackend);
+  <script type="text/javascript" charset="utf-8">
+    function lookup(searchString, suggest) {
+      new Ajax.Request('/users/autocomplete', { parameters: {name: searchString, rand: (new Date()).getTime()},
+                                                onSuccess: function(response) {
+                                                  suggest(response.responseJSON);
+                                                } });
+    }
+    
+    var cachedBackend = new Autocompleter.Cache(lookup, {choices: 10});
+    var cachedLookup = cachedBackend.lookup.bind(cachedBackend);
 
-== Features:
+    new Autocompleter.Json("autocomplete", "autocomplete_choices", cachedLookup, {});
+  </script>
 
-* all features...
+In the above example, cachedLookup is a function that behaves just like the lookup function except that is caches the responses.
 
-== Known issues:
+Making a first call to cachedLookup with "m" as the searchString, will call the lookup function call the suggest callback function and cache the results. A second call the cachedLookup function with "m" as the searchString will NOT call the lookup function, but serve the results from the previous call to the suggest callback function. But there is more.... Making a call to cachedLookup with "mi" as the searchString will NOT call the lookup function, but will use the result for the "m" searchString as a basis for client side search. These results are also cached so searching for "mic" will use the "mi" results as a basis. This speeds up the lookup function quite significantly, and greatly reduced the number of round trips to your server.
 
-* any?
+*For Autocompleter.Cache to work it is important that your lookup function finds ALL the suggestions for the search string. It is OK to give around a thousand suggestions. So find it all, not just the first 10*
 
-== Requirements:
+=== Options
+
+The last constructor argument of Autocompleter.Cache is an options hash you can use to customize its behavior:
+
+[choices]      The maximum number of suggestions that should be passed to the suggest callback function. Defaults to 10.
+[fuzzySearch]  Specifies if the local client side search should be "fuzzy". Refer to the description above for a "definition".
+
+== Known issues
+
+Let us know if you find any.
+
+== Requirements
 
 * Prototype (http://prototypejs.org)
 * Scriptaculous (http://script.aculo.us)
 
-== ORIGINAL CODE IDEAS:
+== Original code ideas:
 
 * http://www.37signals.com/svn/posts/1356-new-in-highrise-much-faster-sidebar-searching
 
-== SPONSORED BY:
+== Sponsored by
 
 http://zendesk.com - Enlightened Customer Support
 
 == LICENSE:
 
-?????
+Copyright (c) 2009 Zendesk
+
+Permission is hereby granted, free of charge, to any person
+obtaining a copy of this software and associated documentation
+files (the "Software"), to deal in the Software without
+restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following
+conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
