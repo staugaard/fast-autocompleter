@@ -29,15 +29,6 @@ div.autocomplete ul li.selected {
   color: #FFF;
 }
 
-div.autocomplete ul li strong {
-  background: #BBB;
-}
-
-div.autocomplete ul li.selected strong {
-  background: #3159A1;
-}
-
-
 
 /* Only used on multi select fields */
 
