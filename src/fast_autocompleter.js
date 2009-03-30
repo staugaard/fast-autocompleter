@@ -140,25 +140,6 @@ Autocompleter.MultiValue = Class.create({
     if(Element.getStyle(this.choicesHolder, 'display')=='none') {
       this.options.onShow(this.holder, this.choicesHolder);
     }
-    if(!this.iefix &&
-      (Prototype.Browser.IE) &&
-      (Element.getStyle(this.choicesHolder, 'position')=='absolute')) {
-      new Insertion.After(this.choicesHolder,
-       '<iframe id="' + this.choicesHolder.id + '_iefix" '+
-       'style="display:none;position:absolute;filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0);" ' +
-       'src="javascript:false;" frameborder="0" scrolling="no"></iframe>');
-      this.iefix = $(this.choicesHolder.id+'_iefix');
-    }
-    if(this.iefix) {
-      setTimeout(this.fixIEOverlapping.bind(this), 50);
-    }
-  },
-
-  fixIEOverlapping: function() {
-    Position.clone(this.choicesHolder, this.iefix, {setTop:(!this.choicesHolder.style.height)});
-    this.iefix.style.zIndex = 1;
-    this.choicesHolder.style.zIndex = 2;
-    Element.show(this.iefix);
   },
 
   hide: function() {
