@@ -18,6 +18,8 @@ div.autocomplete ul li {
   margin: 0px !important;
   white-space: nowrap !important;
   cursor: pointer;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 div.autocomplete ul li.selected {
