@@ -84,7 +84,7 @@ Autocompleter.MultiValue = Class.create({
   dataFetcher: null,
   
   createSelectedElement: function(id, title) {
-    var closeLink = new Element('a', {className: 'close', href: '#'}).update('×');
+    var closeLink = new Element('a', {className: 'close'}).update('×');
     closeLink.observe('click', function(e) {
       var choiceElement = e.element().up('li');
       choiceElement.remove();
@@ -117,7 +117,7 @@ Autocompleter.MultiValue = Class.create({
     this.options.onHide = this.options.onHide ||
       function(element, update){ new Effect.Fade(update,{duration: 0.15}) };
     
-    this.searchField = new Element('input', {type: 'text'});
+    this.searchField = new Element('input', {type: 'text', autocomplete: 'off'});
     this.searchFieldItem = new Element('li', {className: 'search_field_item'}).update(this.searchField);
     this.holder = new Element('ul', {className: 'multi_value_field', style: outputElement.getAttribute('style')}).update(this.searchFieldItem);
     outputElement.insert({before: this.holder});
