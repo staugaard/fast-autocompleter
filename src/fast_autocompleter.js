@@ -91,7 +91,7 @@ Autocompleter.MultiValue = Class.create({
       e.stop();
     });
     var hiddenValueField = new Element('input', {type: 'hidden', name: this.name, value: id, style: 'display: none;'});
-    return new Element('li', { className:'choice', choice_id: id }).insert(title).insert(closeLink).insert(hiddenValueField);
+    return new Element('li', { className:'choice', choice_id: id }).insert(title.escapeHTML()).insert(closeLink).insert(hiddenValueField);
   },
   
   initialize: function(element, dataFetcher, values, options) {
