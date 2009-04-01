@@ -130,6 +130,8 @@ Autocompleter.MultiValue = Class.create({
     
     Event.observe(this.holder, 'click', Form.Element.focus.curry(this.searchField));
     Event.observe(this.searchField, 'keydown', this.onKeyPress.bindAsEventListener(this));
+    Event.observe(this.searchField, 'focus', this.show.bindAsEventListener(this));
+    Event.observe(this.searchField, 'blur', this.hide.bindAsEventListener(this));
     
     (values || []).each(function(value) {
       this.searchFieldItem.insert({before: this.createSelectedElement(value[1], value[0])});
