@@ -101,6 +101,7 @@ Autocompleter.MultiValue = Class.create({
     this.form = outputElement.up('form');
     this.dataFetcher = dataFetcher;
     this.active = false;
+    this.acceptNewValues      = this.options.acceptNewValues || false;
     this.options.frequency    = this.options.frequency || 0.4;
     this.options.minChars     = this.options.minChars || 2;
     this.options.onShow       = this.options.onShow ||
@@ -130,11 +131,16 @@ Autocompleter.MultiValue = Class.create({
     
     Event.observe(this.holder, 'click', Form.Element.focus.curry(this.searchField));
     Event.observe(this.searchField, 'keydown', this.onKeyPress.bindAsEventListener(this));
+    if (this.acceptNewValues) {
+      this.searchField.name = this.name;
+      Event.observe(this.searchField, 'keyup', this.onKeyUp.bindAsEventListener(this));
+    };
+    
     Event.observe(this.searchField, 'focus', this.show.bindAsEventListener(this));
     Event.observe(this.searchField, 'blur', this.hide.bindAsEventListener(this));
     
     (values || []).each(function(value) {
-      this.searchFieldItem.insert({before: this.createSelectedElement(value[1], value[0])});
+      this.searchFieldItem.insert({before: this.createSelectedElement(this.getTitle(value), this.getValue(value))});
     }, this);
   },
   
@@ -151,7 +157,7 @@ Autocompleter.MultiValue = Class.create({
   },
   
   onKeyPress: function(event) {
-    if(this.active)
+    if(this.active) {
       switch(event.keyCode) {
        case Event.KEY_TAB:
        case Event.KEY_RETURN:
@@ -176,9 +182,10 @@ Autocompleter.MultiValue = Class.create({
          event.stop();
          return;
       }
-     else
-       if(event.keyCode==Event.KEY_TAB || event.keyCode==Event.KEY_RETURN ||
-         (Prototype.Browser.WebKit > 0 && event.keyCode == 0)) return;
+    } else if(event.keyCode==Event.KEY_TAB || event.keyCode==Event.KEY_RETURN ||
+              (Prototype.Browser.WebKit > 0 && event.keyCode == 0)) {
+      return;
+    }
 
     this.changed = true;
     this.hasFocus = true;
@@ -186,6 +193,20 @@ Autocompleter.MultiValue = Class.create({
     if(this.observer) clearTimeout(this.observer);
       this.observer =
         setTimeout(this.onObserverEvent.bind(this), this.options.frequency*1000);
+  },
+  
+  onKeyUp: function(event) {
+    var newValue = '';
+    
+    if(event.keyCode == 188) {
+      var fieldValue = $F(event.element());
+      newValue = fieldValue.substr(0, fieldValue.indexOf(',')).toLowerCase().strip();
+    }
+
+    if (!newValue.blank()) {
+      this.addEntry(newValue, newValue);
+      event.element().value = fieldValue.substring(fieldValue.indexOf(',') + 1, fieldValue.length);
+    };
   },
   
   onObserverEvent: function() {
@@ -224,11 +245,15 @@ Autocompleter.MultiValue = Class.create({
   selectEntry: function() {
     this.active = false;
     var element = this.getCurrentEntry();
-    if (!this.selectedEntries().include('' + element.choiceId)) {
-      this.searchFieldItem.insert({before: this.createSelectedElement(element.choiceId, element.textContent || element.innerText)});
-    };
+    this.addEntry(element.choiceId, element.textContent || element.innerText);
     this.searchField.clear();
     this.searchField.focus();
+  },
+  
+  addEntry: function(id, title) {
+    if (!this.selectedEntries().include('' + id)) {
+      this.searchFieldItem.insert({before: this.createSelectedElement(id, title)});
+    };
   },
   
   selectedEntries: function() {
@@ -250,7 +275,7 @@ Autocompleter.MultiValue = Class.create({
       
       this.choicesHolderList.innerHTML = '';
       choices.each(function(choice, choiceIndex) {
-        this.choicesHolderList.insert(this.createChoiceElement(choice.last(), choice.first(), choiceIndex, term));
+        this.choicesHolderList.insert(this.createChoiceElement(this.getValue(choice), this.getTitle(choice), choiceIndex, term));
       }.bind(this));
       
       for (var i = 0; i < this.entryCount; i++) {
@@ -315,6 +340,14 @@ Autocompleter.MultiValue = Class.create({
       this.active = false;
       this.hide();
     }
+  },
+  
+  getTitle: function(obj) {
+    return Object.isArray(obj) ? obj[0] : obj;
+  },
+  
+  getValue: function(obj) {
+    return Object.isArray(obj) ? obj[1] : obj;
   }
   
 });

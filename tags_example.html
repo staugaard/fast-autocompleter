@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+  <title>tags example</title>
+  <link rel="stylesheet" href="autocomplete.css" type="text/css" media="screen" charset="utf-8">
+  
+  <script type="text/javascript" charset="utf-8" src="lib/prototype.js"></script>
+  <script type="text/javascript" charset="utf-8" src="lib/scriptaculous.js"></script>
+  <script type="text/javascript" charset="utf-8" src="lib/effects.js"></script>
+  <script type="text/javascript" charset="utf-8" src="src/fast_autocompleter.js"></script>
+  
+  <script type="text/javascript" charset="utf-8" src="multivalue_data.js"></script>
+  <script type="text/javascript" charset="utf-8">
+    function lookup(searchString, callback) {
+      var exp = new RegExp(searchString.gsub(/./, ".*#{0}"), 'i');
+      callback(tags.select(function(item) {return exp.test(item);}));
+    }
+    
+    var cachedBackend = new Autocompleter.Cache(lookup, {choices: 10});
+    var cachedLookup = cachedBackend.lookup.bind(cachedBackend);
+  </script>
+</head>
+
+<body>
+  <form action="multi_value_local_example.html" method="get" accept-charset="utf-8">
+    <p>
+      <input type="text" name="name" value="other field" id="name" style="width: 400px"/>
+    </p>
+    
+    <p>
+      <input type="text" name="tags[]" value="" id="tags" style="width: 400px"/>
+    </p>
+    
+    <p>
+      <input type="submit" value="Continue &rarr;">
+    </p>
+  </form>
+  
+  <script type="text/javascript" charset="utf-8">
+    var mvListCached = new Autocompleter.MultiValue('tags', cachedLookup, ["tag1", "tag two"], {frequency: 0.1, acceptNewValues: true});
+  </script>
+</body>
+</html>
