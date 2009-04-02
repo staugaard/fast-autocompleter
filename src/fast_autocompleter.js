@@ -91,7 +91,7 @@ Autocompleter.MultiValue = Class.create({
       e.stop();
     });
     var hiddenValueField = new Element('input', {type: 'hidden', name: this.name, value: id, style: 'display: none;'});
-    return new Element('li', { className:'choice', choice_id: id }).insert(title.escapeHTML()).insert(closeLink).insert(hiddenValueField);
+    return new Element('li', { className:'choice', choice_id: id }).insert(('' + title).escapeHTML()).insert(closeLink).insert(hiddenValueField);
   },
   
   initialize: function(element, dataFetcher, values, options) {
@@ -132,7 +132,6 @@ Autocompleter.MultiValue = Class.create({
     Event.observe(this.holder, 'click', Form.Element.focus.curry(this.searchField));
     Event.observe(this.searchField, 'keydown', this.onKeyPress.bindAsEventListener(this));
     if (this.acceptNewValues) {
-      this.searchField.name = this.name;
       Event.observe(this.searchField, 'keyup', this.onKeyUp.bindAsEventListener(this));
     };
     
@@ -140,7 +139,7 @@ Autocompleter.MultiValue = Class.create({
     Event.observe(this.searchField, 'blur', this.hide.bindAsEventListener(this));
     
     (values || []).each(function(value) {
-      this.searchFieldItem.insert({before: this.createSelectedElement(this.getTitle(value), this.getValue(value))});
+      this.searchFieldItem.insert({before: this.createSelectedElement(this.getValue(value), this.getTitle(value))});
     }, this);
   },
   
@@ -206,6 +205,12 @@ Autocompleter.MultiValue = Class.create({
     if (!newValue.blank()) {
       this.addEntry(newValue, newValue);
       event.element().value = fieldValue.substring(fieldValue.indexOf(',') + 1, fieldValue.length);
+    };
+    
+    if ($F(event.element()).blank()) {
+      event.element().removeAttribute('name');
+    } else {
+      event.element().name = this.name;
     };
   },
   
@@ -320,7 +325,7 @@ Autocompleter.MultiValue = Class.create({
 
   createChoiceElement: function(id, title, choiceIndex, searchTerm) {
     var node = new Element('li', { choice_id: id });
-    node.innerHTML = title.escapeHTML().gsub(new RegExp(searchTerm, 'i'), '<strong>#{0}</strong>');
+    node.innerHTML = ('' + title).escapeHTML().gsub(new RegExp(searchTerm, 'i'), '<strong>#{0}</strong>');
     node.choiceId = id;
     node.autocompleteIndex = choiceIndex;
     return node;
