@@ -15,7 +15,7 @@ Autocompleter.Json = Class.create(Autocompleter.Base, {
   },
   
   jsonChoiceToListChoice: function(choice, mark) {
-    return '<li>' + choice.escapeHTML().gsub(new RegExp(this.getToken(), 'i'), '<strong>#{0}</strong>') + '</li>';
+    return '<li>' + choice.escapeHTML() + '</li>';
   }
 });
 
@@ -325,7 +325,7 @@ Autocompleter.MultiValue = Class.create({
 
   createChoiceElement: function(id, title, choiceIndex, searchTerm) {
     var node = new Element('li', { choice_id: id });
-    node.innerHTML = ('' + title).escapeHTML().gsub(new RegExp(searchTerm, 'i'), '<strong>#{0}</strong>');
+    node.innerHTML = ('' + title).escapeHTML();
     node.choiceId = id;
     node.autocompleteIndex = choiceIndex;
     return node;
