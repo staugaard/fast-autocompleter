@@ -120,7 +120,7 @@ Autocompleter.MultiValue = Class.create({
     
     this.searchField = new Element('input', {type: 'text', autocomplete: 'off'});
     this.searchFieldItem = new Element('li', {className: 'search_field_item'}).update(this.searchField);
-    this.holder = new Element('ul', {className: 'multi_value_field', style: outputElement.getAttribute('style')}).update(this.searchFieldItem);
+    this.holder = new Element('ul', {className: 'multi_value_field', style: outputElement.readAttribute('style')}).update(this.searchFieldItem);
     outputElement.insert({before: this.holder});
     outputElement.remove();
     
