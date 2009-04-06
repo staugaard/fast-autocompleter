@@ -86,11 +86,10 @@ Autocompleter.MultiValue = Class.create({
   createSelectedElement: function(id, title) {
     var closeLink = new Element('a', {className: 'close'}).update('×');
     closeLink.observe('click', function(e) {
-      var choiceElement = e.element().up('li');
-      choiceElement.remove();
+      this.removeEntry(e.element().up('li'));
       e.stop();
-    });
-    var hiddenValueField = new Element('input', {type: 'hidden', name: this.name, value: id, style: 'display: none;'});
+    }.bind(this));
+    var hiddenValueField = new Element('input', {type: 'hidden', name: this.name + '[]', value: id, style: 'display: none;'});
     return new Element('li', { className:'choice', choice_id: id }).insert(('' + title).escapeHTML()).insert(closeLink).insert(hiddenValueField);
   },
   
@@ -138,8 +137,9 @@ Autocompleter.MultiValue = Class.create({
     Event.observe(this.searchField, 'focus', this.show.bindAsEventListener(this));
     Event.observe(this.searchField, 'blur', this.hide.bindAsEventListener(this));
     
+    this.setEmptyValue();
     (values || []).each(function(value) {
-      this.searchFieldItem.insert({before: this.createSelectedElement(this.getValue(value), this.getTitle(value))});
+      this.addEntry(this.getValue(value), this.getTitle(value));
     }, this);
   },
   
@@ -210,7 +210,7 @@ Autocompleter.MultiValue = Class.create({
     if ($F(event.element()).blank()) {
       event.element().removeAttribute('name');
     } else {
-      event.element().name = this.name;
+      event.element().name = this.name + '[]';
     };
   },
   
@@ -259,10 +259,28 @@ Autocompleter.MultiValue = Class.create({
     if (!this.selectedEntries().include('' + id)) {
       this.searchFieldItem.insert({before: this.createSelectedElement(id, title)});
     };
+    var emptyValueField = this.form.down('input.emptyValueField');
+    if (emptyValueField) {
+      emptyValueField.remove();
+    };
+  },
+  
+  removeEntry: function(entryElement) {
+    entryElement.remove();
+    if (this.selectedEntries().length == 0) {
+      this.setEmptyValue();
+    };
+  },
+  
+  setEmptyValue: function() {
+    var emptyValueField = this.form.down('input.emptyValueField');
+    if (!emptyValueField) {
+      this.form.insert(new Element('input', {type: 'hidden', name: this.name, className: 'emptyValueField'}));
+    };
   },
   
   selectedEntries: function() {
-    return this.form.select("input[name='" + this.name + "']").map(function(entry) {return entry.value});
+    return this.form.select("input[name='" + this.name + "[]']").map(function(entry) {return entry.value});
   },
 
   startIndicator: function() {},
