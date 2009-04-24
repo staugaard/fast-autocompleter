@@ -196,15 +196,20 @@ Autocompleter.MultiValue = Class.create({
   
   onKeyUp: function(event) {
     var newValue = '';
-    
-    if(event.keyCode == 188) {
+    if(event.keyCode == 188 || event.keyCode == 32) {
       var fieldValue = $F(event.element());
-      newValue = fieldValue.substr(0, fieldValue.indexOf(',')).toLowerCase().strip();
+      var separatorIndex = 0;
+      if (event.keyCode == 188) {
+        separatorIndex = fieldValue.indexOf(',');
+      } else if (event.keyCode == 32) {
+        separatorIndex = fieldValue.indexOf(' ');
+      };
+      newValue = fieldValue.substr(0, separatorIndex).toLowerCase().strip();
     }
 
     if (!newValue.blank()) {
       this.addEntry(newValue, newValue);
-      event.element().value = fieldValue.substring(fieldValue.indexOf(',') + 1, fieldValue.length);
+      event.element().value = fieldValue.substring(separatorIndex + 1, fieldValue.length);
     };
     
     if ($F(event.element()).blank()) {
