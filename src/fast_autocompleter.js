@@ -293,7 +293,7 @@ Autocompleter.MultiValue = Class.create({
   },
   
   selectedEntries: function() {
-    return this.form.select("input[name='" + this.name + "[]']").map(function(entry) {return entry.value});
+    return this.form.select("input[type=hidden][name='" + this.name + "[]']").map(function(entry) {return entry.value});
   },
 
   startIndicator: function() {},
