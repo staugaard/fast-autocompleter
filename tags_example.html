@@ -40,6 +40,9 @@
     </p>
   </form>
   
+  <button onclick="mvListCached.addEntry('tag three');">Add tag three</button>
+  <button onclick="mvListCached.removeEntry('tag three');">Remove tag three</button>
+  
   <script type="text/javascript" charset="utf-8">
     var mvListCached = new Autocompleter.MultiValue('tags', cachedLookup, ["tag1", "tag two"], {frequency: 0.1, acceptNewValues: true});
   </script>

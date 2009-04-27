@@ -261,6 +261,7 @@ Autocompleter.MultiValue = Class.create({
   },
   
   addEntry: function(id, title) {
+    title = title || id;
     if (!this.selectedEntries().include('' + id)) {
       this.searchFieldItem.insert({before: this.createSelectedElement(id, title)});
     };
@@ -271,10 +272,17 @@ Autocompleter.MultiValue = Class.create({
   },
   
   removeEntry: function(entryElement) {
-    entryElement.remove();
-    if (this.selectedEntries().length == 0) {
-      this.setEmptyValue();
+    entryElement = Object.isElement(entryElement) ? entryElement : this.holder.down("li[choice_id=" + entryElement + "]");
+    if (entryElement) {
+      entryElement.remove();
+      if (this.selectedEntries().length == 0) {
+        this.setEmptyValue();
+      };
     };
+  },
+  
+  clear: function() {
+    this.holder.select('li.choice').each(function(e) { this.removeEntry(e); }, this);
   },
   
   setEmptyValue: function() {
