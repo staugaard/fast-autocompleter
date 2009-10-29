@@ -35,7 +35,7 @@ Autocompleter.Cache = Class.create({
   
   _lookupInCache: function(fullTerm, partialTerm, callback) {
     var partialTerm = partialTerm || fullTerm;
-    var result = this.cache[partialTerm];
+    var result = this.cache.get(partialTerm);
     
     if (result == null) {
       if (partialTerm.length > 1) {
@@ -71,7 +71,7 @@ Autocompleter.Cache = Class.create({
   },
   
   _storeInCache: function(term, callback, data) {
-    this.cache[term] = data;
+    this.cache.set(term, data);
     if (callback) {
       callback(data.slice(0, this.options.choices));
     };
