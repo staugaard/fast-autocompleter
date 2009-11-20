@@ -129,9 +129,10 @@ Autocompleter.MultiValue = Class.create({
     this.choicesHolder.hide();
     
     Event.observe(this.holder, 'click', Form.Element.focus.curry(this.searchField));
-    Event.observe(this.searchField, 'keydown', this.onKeyPress.bindAsEventListener(this));
+    Event.observe(this.searchField, 'keydown', this.onSearchFieldKeyPress.bindAsEventListener(this));
     if (this.acceptNewValues) {
-      Event.observe(this.searchField, 'keyup', this.onKeyUp.bindAsEventListener(this));
+      Event.observe(this.searchField, 'keyup', this.onSearchFieldKeyUp.bindAsEventListener(this));
+      Event.observe(this.searchField, 'blur', this.onSearchFieldBlur.bindAsEventListener(this));
     };
     
     Event.observe(this.searchField, 'focus', this.show.bindAsEventListener(this));
@@ -155,7 +156,7 @@ Autocompleter.MultiValue = Class.create({
     if(this.iefix) Element.hide(this.iefix);
   },
   
-  onKeyPress: function(event) {
+  onSearchFieldKeyPress: function(event) {
     if(this.active) {
       switch(event.keyCode) {
        case Event.KEY_TAB:
@@ -194,7 +195,7 @@ Autocompleter.MultiValue = Class.create({
         setTimeout(this.onObserverEvent.bind(this), this.options.frequency*1000);
   },
   
-  onKeyUp: function(event) {
+  onSearchFieldKeyUp: function(event) {
     var newValue = '';
     if(event.keyCode == 188 || event.keyCode == 32) {
       var fieldValue = $F(event.element());
@@ -211,14 +212,16 @@ Autocompleter.MultiValue = Class.create({
       this.addEntry(newValue, newValue);
       event.element().value = fieldValue.substring(separatorIndex + 1, fieldValue.length);
     };
-    
-    if ($F(event.element()).blank()) {
-      event.element().removeAttribute('name');
-    } else {
-      event.element().name = this.name + '[]';
-    };
   },
   
+  onSearchFieldBlur: function(event) {
+    var newValue = $F(event.element()).strip();
+    if (!newValue.blank()) {
+      this.addEntry(newValue, newValue);
+      event.element().value = '';
+    };
+  },
+
   onObserverEvent: function() {
     this.changed = false;
     this.tokenBounds = null;
