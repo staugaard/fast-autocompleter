@@ -135,6 +135,7 @@ Autocompleter.MultiValue = Class.create({
       Event.observe(this.searchField, 'blur', this.onSearchFieldBlur.bindAsEventListener(this));
     };
     
+    Event.observe(this.searchField, 'focus', this.getUpdatedChoices.bindAsEventListener(this));
     Event.observe(this.searchField, 'focus', this.show.bindAsEventListener(this));
     Event.observe(this.searchField, 'blur', this.hide.bindAsEventListener(this));
     
@@ -145,14 +146,18 @@ Autocompleter.MultiValue = Class.create({
   },
   
   show: function() {
-    if(Element.getStyle(this.choicesHolder, 'display')=='none') {
-      this.options.onShow(this.holder, this.choicesHolder);
-    }
+    if (!this.choicesHolderList.empty()) {
+      if(Element.getStyle(this.choicesHolder, 'display')=='none') {
+        this.options.onShow(this.holder, this.choicesHolder);
+      }
+    };
   },
 
   hide: function() {
     this.stopIndicator();
-    if(Element.getStyle(this.choicesHolder, 'display')!='none') this.options.onHide(this.element, this.choicesHolder);
+    if(Element.getStyle(this.choicesHolder, 'display')!='none') {
+      this.options.onHide(this.element, this.choicesHolder);
+    }
     if(this.iefix) Element.hide(this.iefix);
   },
   
@@ -215,10 +220,14 @@ Autocompleter.MultiValue = Class.create({
   },
   
   onSearchFieldBlur: function(event) {
-    var newValue = $F(event.element()).strip();
+    this.addNewValueFromSearchField.bind(this).delay(0.1, event.element());
+  },
+  
+  addNewValueFromSearchField: function(searchFieldElement) {
+    var newValue = $F(searchFieldElement).strip();
     if (!newValue.blank()) {
       this.addEntry(newValue, newValue);
-      event.element().value = '';
+      searchFieldElement.value = '';
     };
   },
 
@@ -308,7 +317,11 @@ Autocompleter.MultiValue = Class.create({
   getUpdatedChoices: function() {
     this.startIndicator();
     var term = this.getToken();
-    this.dataFetcher(term, this.updateChoices.curry(term).bind(this));
+    if (term.length > 0) {
+      this.dataFetcher(term, this.updateChoices.curry(term).bind(this));
+    } else {
+      this.choicesHolderList.update();
+    };
   },
   
   updateChoices: function(term, choices) {
