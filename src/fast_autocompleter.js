@@ -129,7 +129,7 @@ Autocompleter.MultiValue = Class.create({
     this.choicesHolder.hide();
     
     Event.observe(this.holder, 'click', Form.Element.focus.curry(this.searchField));
-    Event.observe(this.searchField, 'keydown', this.onSearchFieldKeyPress.bindAsEventListener(this));
+    Event.observe(this.searchField, 'keydown', this.onSearchFieldKeyDown.bindAsEventListener(this));
     if (this.acceptNewValues) {
       Event.observe(this.searchField, 'keyup', this.onSearchFieldKeyUp.bindAsEventListener(this));
       Event.observe(this.searchField, 'blur', this.onSearchFieldBlur.bindAsEventListener(this));
@@ -161,7 +161,7 @@ Autocompleter.MultiValue = Class.create({
     if(this.iefix) Element.hide(this.iefix);
   },
   
-  onSearchFieldKeyPress: function(event) {
+  onSearchFieldKeyDown: function(event) {
     if(this.active) {
       switch(event.keyCode) {
        case Event.KEY_TAB:
@@ -190,6 +190,13 @@ Autocompleter.MultiValue = Class.create({
     } else if(event.keyCode==Event.KEY_TAB || event.keyCode==Event.KEY_RETURN ||
               (Prototype.Browser.WebKit > 0 && event.keyCode == 0)) {
       return;
+    } else if (event.keyCode==Event.KEY_BACKSPACE) {
+      if (event.element().getValue().blank()) {
+        var tag = event.element().up('li.search_field_item').previous('li.choice');
+        if (tag) {
+          this.removeEntry(tag);
+        }
+      };
     }
 
     this.changed = true;
