@@ -103,6 +103,7 @@ Autocompleter.MultiValue = Class.create({
     this.acceptNewValues      = this.options.acceptNewValues || false;
     this.options.frequency    = this.options.frequency || 0.4;
     this.options.minChars     = this.options.minChars || 2;
+    this.options.tabindex     = this.options.tabindex || outputElement.readAttribute('tabindex') || '';
     this.options.onShow       = this.options.onShow ||
       function(element, update) {
         if(!update.style.position || update.style.position=='absolute') {
@@ -117,7 +118,7 @@ Autocompleter.MultiValue = Class.create({
     this.options.onHide = this.options.onHide ||
       function(element, update){ new Effect.Fade(update,{duration: 0.15}) };
     
-    this.searchField = new Element('input', {type: 'text', autocomplete: 'off'});
+    this.searchField = new Element('input', {type: 'text', autocomplete: 'off', tabindex: this.options.tabindex});
     this.searchFieldItem = new Element('li', {className: 'search_field_item'}).update(this.searchField);
     this.holder = new Element('ul', {className: 'multi_value_field', style: outputElement.readAttribute('style')}).update(this.searchFieldItem);
     outputElement.insert({before: this.holder});
