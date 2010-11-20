@@ -1,3 +1,5 @@
+if (typeof(Autocompleter) == 'undefined') { Autocompleter = {}; }
+
 Autocompleter.Json = Class.create(Autocompleter.Base, {
   initialize: function(element, update, lookupFunction, options) {
     options = options || {};
@@ -19,6 +21,51 @@ Autocompleter.Json = Class.create(Autocompleter.Base, {
   }
 });
 
+// Schedules the next request
+// Only remembers two at a time. The current request, and the waiting request
+//
+//     rateLimiter = new Autocompleter.RateLimiting();
+//     rateLimiter.sendRequest(r1, callback); // sends the first request
+//     rateLimiter.sendRequest(r2, callback); // schedules the second request
+//
+//     // if r1 has not returned
+//     //   schedule r3, throw away r2
+//     // if r1 has returned
+//     //   r2 is the current request, r3 is still scheduled
+//     rateLimiter.sendRequest(r3, callback); // if r1 has not returned
+//
+Autocompleter.RateLimiting = function() {
+  this.currentRequest = null;
+  this.scheduledRequest = null;
+};
+
+Autocompleter.RateLimiting.prototype = {
+
+  schedule: function(f, searchTerm, callback) {
+    this.scheduledRequest = { f:f, searchTerm:searchTerm, callback:callback };
+    this._sendRequest();
+  },
+
+  _sendRequest: function() {
+    if (!this.currentRequest) {
+      this.currentRequest = this.scheduledRequest;
+      this.scheduledRequest = null;
+
+      this.currentRequest.f(this.currentRequest.searchTerm, this._callback.bind(this));
+    }
+  },
+
+  _callback: function(data) {
+    this.currentRequest.callback(data);
+    this.currentRequest = null;
+
+    if (this.scheduledRequest) {
+      this._sendRequest();
+    }
+  }
+
+};
+
 Autocompleter.Cache = Class.create({
   initialize: function(backendLookup, options) {
     this.cache = new Hash();
@@ -30,7 +77,9 @@ Autocompleter.Cache = Class.create({
   },
   
   lookup: function(term, callback) {
-    return this._lookupInCache(term, null, callback) || this.backendLookup(term, this._storeInCache.curry(term, callback).bind(this));
+    return this._lookupInCache(term, null, callback) ||
+      this.rateLimiter.schedule(this.backendLookup, term,
+        this._storeInCache.curry(term, callback).bind(this));
   },
   
   _lookupInCache: function(fullTerm, partialTerm, callback) {
