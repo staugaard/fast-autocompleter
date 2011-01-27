@@ -56,7 +56,10 @@ Autocompleter.RateLimiting.prototype = {
   },
 
   _callback: function(data) {
-    this.currentRequest.callback(data);
+    try {
+      this.currentRequest.callback(data);
+    } catch (e) {
+    }
     this.currentRequest = null;
 
     if (this.scheduledRequest) {
@@ -70,6 +73,7 @@ Autocompleter.Cache = Class.create({
   initialize: function(backendLookup, options) {
     this.cache = new Hash();
     this.backendLookup = backendLookup;
+    this.rateLimiter = new Autocompleter.RateLimiting();
     this.options = Object.extend({
       choices: 10,
       fuzzySearch: false
@@ -94,8 +98,18 @@ Autocompleter.Cache = Class.create({
       };
     } else {
       if (fullTerm != partialTerm) {
+        var hasMore = result.length > 0 && result[result.length - 1]['more'] === true;
         result = this._localSearch(result, fullTerm);
-        this._storeInCache(fullTerm, null, result);
+        if (!hasMore) {
+          this._storeInCache(fullTerm, null, result);
+        } else {
+          if (result.length < this.options.choices) {
+            return false
+          };
+        };
+      };
+      if (result.length > 0 && result[result.length - 1]['more'] !== undefined) {
+        result = result.slice(0, result.length - 1);
       };
       callback(result.slice(0, this.options.choices));
       return true;
@@ -122,7 +136,11 @@ Autocompleter.Cache = Class.create({
   _storeInCache: function(term, callback, data) {
     this.cache.set(term, data);
     if (callback) {
-      callback(data.slice(0, this.options.choices));
+      var items = data.slice(0, this.options.choices);
+      if (items.length > 1 && items[items.length - 1]['more'] !== undefined) {
+        items = items.slice(0, items.length - 1);
+      };
+      callback(items);
     };
   }
 });
