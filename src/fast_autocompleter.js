@@ -9,7 +9,7 @@ Autocompleter.Json = Class.create(Autocompleter.Base, {
   },
   
   getUpdatedChoices: function() {
-    this.lookupFunction(this.getToken().toLowerCase(), this.updateJsonChoices.bind(this));
+    this.lookupFunction(this.getToken(), this.updateJsonChoices.bind(this));
   },
   
   updateJsonChoices: function(choices) {
@@ -318,7 +318,7 @@ Autocompleter.MultiValue = Class.create({
   },
   
   getToken: function() {
-    return this.searchField.value;
+    return this.searchField.value.toLowerCase();
   },
 
   markPrevious: function() {
