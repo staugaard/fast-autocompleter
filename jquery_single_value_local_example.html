@@ -1,0 +1,208 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link rel="stylesheet" href="autocomplete.css" type="text/css" media="screen" charset="utf-8">
+
+  <title>example</title>
+  
+  <script type="text/javascript" charset="utf-8" src="lib/jquery-1.6.js"></script>
+  <script type="text/javascript" charset="utf-8" src="src/jquery_fast_autocompleter.js"></script>
+  
+  <script type="text/javascript" charset="utf-8">
+    var names = ["Shaylee Armstrong",
+             "Melyna McKenzie",
+             "Jaime Waelchi",
+             "Ellis Rogahn",
+             "Selina Steuber",
+             "Cristal Runolfsson",
+             "Rhianna Jenkins",
+             "Leatha Bechtelar",
+             "Wilber Denesik",
+             "Lilla Fadel",
+             "Ms. Lionel Brakus",
+             "Colt Mertz",
+             "Eleazar Howell DVM",
+             "Lewis Nicolas",
+             "Jarrell Rempel",
+             "Anais Gerhold",
+             "Kristofer Conroy",
+             "Gennaro Reynolds",
+             "Travon Gerlach",
+             "Alden Connelly",
+             "Francisca Nicolas",
+             "Letha Runte",
+             "Marion Ondricka",
+             "Ken Heaney",
+             "Emilio Baumbach",
+             "Brody Barton",
+             "Ahmad Moore",
+             "Mrs. Marge Fisher",
+             "Dedrick Kiehn",
+             "Evans Fritsch",
+             "Dedrick Kessler",
+             "Jammie Mohr",
+             "Lessie Kiehn",
+             "Briana Goldner",
+             "Celestine Crist",
+             "Jonathan Ruecker",
+             "Dario Bergnaum",
+             "Gideon Hickle",
+             "Cydney Schowalter",
+             "Okey Jenkins",
+             "Eden Stokes",
+             "Malcolm Rempel Sr.",
+             "Russel Rohan",
+             "Mr. Alberta Murray",
+             "Burley Kozey",
+             "Alford Paucek",
+             "Adelle Vandervort V",
+             "Golda Nader",
+             "Marisa Klocko",
+             "Mireya Greenfelder",
+             "Waylon O'Kon",
+             "Magali Rippin",
+             "Mr. Barbara Kirlin",
+             "Nat Graham",
+             "Lexus Wunsch",
+             "Mr. Manuela Gutmann",
+             "Spencer Altenwerth",
+             "Reese Crona",
+             "Dianna Franecki",
+             "Nova McKenzie",
+             "Carolyn Rohan",
+             "Mina Wyman",
+             "Maximillia Fisher V",
+             "Triston Brakus Jr.",
+             "Mabelle Kreiger",
+             "Antonetta Emard",
+             "Miss Sheila Daugherty",
+             "Tyrique Erdman",
+             "Reymundo Renner",
+             "Sarai Hackett",
+             "Shawna Jacobs",
+             "Maximus Langosh",
+             "Tito Champlin",
+             "Clair Kris",
+             "Abigail Parker",
+             "Felipa DuBuque",
+             "Margaretta Connelly",
+             "Una Boehm",
+             "Leora Herzog",
+             "Tracey Keeling",
+             "Alexa Bode",
+             "Everette Klocko",
+             "Felix Ritchie",
+             "Ms. Myriam Sauer",
+             "Geovanni Reinger",
+             "Garry Kertzmann",
+             "Gloria Moen",
+             "Rebecca Koch",
+             "Angie Yundt",
+             "Ms. Pablo Gutmann",
+             "Euna Wisozk",
+             "Emery Langworth",
+             "Emmet Bashirian",
+             "Emmitt Schmidt",
+             "Madaline Legros",
+             "Emil Grant",
+             "Mona Schaden MD",
+             "Alice Effertz",
+             "Margarette Smitham",
+             "Jacquelyn Cremin"];
+    
+    function lookup(searchString, callback) {
+      var exp = new RegExp(searchString, 'i');
+      $('#log').append('lookup ' + searchString + '<br/>');
+      var foundNames = [];
+      $.each(names, function(index, name) {
+        if (exp.test(name)) {
+          foundNames.push(name);
+        }
+      })
+      callback(foundNames);
+    }
+
+    //var cachedBackend = new Autocompleter.Cache(lookup, {choices: 10});
+    //var cachedLookup = cachedBackend.lookup.bind(cachedBackend);
+  </script>
+  
+  <style type="text/css" media="screen">
+    #form, #log {
+      float: left;
+      margin: 25px;
+    }
+    
+    input {
+      width: 300px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="form">
+    <form action="single_value_local_example.html" method="get" accept-charset="utf-8">
+      <p>
+        This field has no cache:<br/>
+        <input type="text" id="autocomplete" name="autocomplete_parameter" autocomplete="off"/>
+        <div id="autocomplete_choices" class="autocomplete"></div>
+      </p>
+      <p>
+        This field uses the cache:<br/>
+        <input type="text" id="caching_autocomplete" name="caching_autocomplete_parameter" autocomplete="off"/>
+        <div id="caching_autocomplete_choices" class="autocomplete"></div>
+      </p>
+      <p>
+        <input type="submit" value="Continue &rarr;">
+      </p>
+    </form>
+  </div>
+  
+  <div id="log">
+    <strong>Log:</strong><br/>
+  </div>
+  
+  <p style="clear: left;">
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  </p>
+  
+  <p>
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  </p>
+  
+  <p>
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  </p>
+  
+  <p>
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  </p>
+  
+  <p>
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  </p>
+  
+  <p>
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  </p>
+  
+  <script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+      $('#autocomplete').fastAutocomplete({
+        lookup: lookup,
+        render: function(suggestions) {
+          var suggestionsContainer = $('#autocomplete_choices');
+          suggestionsContainer.empty();
+          $.each(suggestions, function(index, suggestion) {
+            suggestionsContainer.append($('<li>').text(suggestion));
+          });
+        }
+      })
+    });
+    //var myAutocompleter = new Autocompleter.Json("#autocomplete", lookup, {frequency: 0.5, choices: 10});
+    //var myCachedAutocompleter = new Autocompleter.Json("caching_autocomplete", "caching_autocomplete_choices", cachedLookup, {frequency: 0.1});
+  </script>
+</body>
+</html>
