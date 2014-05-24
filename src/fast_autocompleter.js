@@ -318,7 +318,7 @@ Autocompleter.MultiValue = Class.create({
   },
   
   getToken: function() {
-    return this.searchField.value;
+    return this.searchField.value.toLowerCase();
   },
 
   markPrevious: function() {
